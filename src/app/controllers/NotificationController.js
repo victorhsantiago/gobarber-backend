@@ -8,7 +8,7 @@ class NotificationController {
     })
 
     if (!checkIsProvider)
-      res.status(401).json({ error: 'Only providers may list appointments' })
+      res.status(401).json({ error: 'Only providers receive appointments' })
 
     const notifications = await Notification.find({
       user: req.userId,
@@ -17,6 +17,16 @@ class NotificationController {
       .limit(20)
 
     return res.json({ notifications })
+  }
+
+  async update(req, res) {
+    const notification = await Notification.findByIdAndUpdate(
+      req.params.id,
+      { read: true },
+      { new: true }
+    )
+
+    return res.json({ notification })
   }
 }
 
