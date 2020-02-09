@@ -55,10 +55,15 @@ class AppointmentController {
       where: { id: provider_id, provider: true },
     })
 
+    if (req.userId === provider_id)
+      return res.status(401).json({
+        error: 'Only costumers may create appointments',
+      })
+
     if (!checkIsProvider)
-      res
+      return res
         .status(401)
-        .json({ error: 'You can only create appointments with providers' })
+        .json({ error: 'You can create appointments only with providers' })
 
     // check for past dates
     const hourStart = startOfHour(parseISO(date))
